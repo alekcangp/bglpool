@@ -13,7 +13,7 @@ services:
       BITCOIN_ZMQ_RAWBLOCK_PORT: "29001"
       BITCOIN_ZMQ_RAWTX_PORT: "29002"
       BITCOIN_RPC_PORT: "8332"
-      BITCOIN_RPC_USER: "user"
-      BITCOIN_RPC_PASS: "pass"
+      BITCOIN_RPC_USER: ""
+      BITCOIN_RPC_PASS: ""
     ports:
       - "5555:5000"

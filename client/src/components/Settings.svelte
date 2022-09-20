@@ -68,7 +68,7 @@ $: {
   const rate = $exchangeRates[$settings.currency]
   if (rate && rate.last) {
     settingConfig.showFX = {
-      label: '₿ Price',
+      label: 'BGL Info',
       valueType: 'bool'
     }
   } else {

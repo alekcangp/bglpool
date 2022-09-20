@@ -88,6 +88,7 @@ function showBlock () {
       </span>
     </SidebarTab>
   {/if}
+<!--
   {#if $haveSupporters }
     <SidebarTab on:click={() => openOverlay('supporters')} tooltip="Supporters">
       <span slot="tab">
@@ -108,7 +109,8 @@ function showBlock () {
       <ContactTab />
     </div>
   </SidebarTab>
-  <SidebarTab open={$sidebarToggle === 'legend'} on:click={() => {settings('legend')}} tooltip="Key">
+--> 
+ <SidebarTab open={$sidebarToggle === 'legend'} on:click={() => {settings('legend')}} tooltip="Key">
     <span slot="tab">
       <Icon icon={infoIcon} color="var(--bold-a)" />
     </span>
@@ -116,6 +118,7 @@ function showBlock () {
       <MempoolLegend />
     </div>
   </SidebarTab>
+<!--
   <SidebarTab open={$sidebarToggle === 'search'} on:click={() => {settings('search')}} tooltip="Search & Highlight" bind:this={searchTabComponent}>
     <span slot="tab" title="Search & Highlight">
       <Icon icon={searchIcon} color="var(--bold-a)" />
@@ -124,6 +127,7 @@ function showBlock () {
       <SearchTab tab={searchTabComponent} />
     </div>
   </SidebarTab>
+-->  
   <SidebarTab open={$sidebarToggle === 'settings'} on:click={() => {settings('settings')}} tooltip="Settings">
     <span slot="tab" title="Settings">
       <Icon icon={cogIcon} color="var(--bold-a)" />

@@ -1,8 +1,10 @@
 import { serverConnected, serverDelay, lastBlockId } from '../stores.js'
 import config from '../config.js'
+import axios from 'axios'
 
 let mempoolTimer
 let lastBlockSeen
+let ii=0
 lastBlockId.subscribe(val => { lastBlockSeen = val })
 
 
@@ -124,7 +126,7 @@ class TxStream {
     this.sendBlockRequest()
     this.sendMempoolRequest()
   }
-
+  
   onmessage (event) {
     if (!event) return
     if (event.data === 'hb') {
@@ -134,10 +136,24 @@ class TxStream {
     } else {
       try {
         const msg = JSON.parse(event.data)
+
+function rpcmem() {
+         axios.post("https://bglnode.online",{"jsonrpc":"1.0","method":"getmempoolinfo","params":[]}).then(function(res){
+         const ve = res.data.result.size;
+         console.log(ve);
+         window.dispatchEvent(new CustomEvent('bitcoin_mempool_count', { detail: ve }))
+         }).catch(function(er) {
+           window.dispatchEvent(new CustomEvent('bitcoin_mempool_count', { detail: msg.count }))
+          })
+}
         if (msg && msg.type === 'count') {
-          window.dispatchEvent(new CustomEvent('bitcoin_mempool_count', { detail: msg.count }))
-        } else if (msg && msg.type === 'txn') {
-          window.dispatchEvent(new CustomEvent('bitcoin_tx', { detail: msg.txn }))
+          rpcmem()
+         } else if (msg && msg.type === 'txn') {
+          window.dispatchEvent(new CustomEvent('bitcoin_tx', { detail: msg.txn }));
+          ii++;
+          if (ii == 10) {ii=0;
+           setTimeout(rpcmem,5000)
+          }
         } else if (msg && msg.type === 'block') {
           if (msg.block && msg.block.id) window.dispatchEvent(new CustomEvent('bitcoin_block', { detail: msg.block }))
         } else {

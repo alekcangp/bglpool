@@ -23,18 +23,18 @@ export default {
   target: getInjectedEnv('TARGET'),
   public: (getInjectedEnv('TARGET', 'dev') === "public"),
   // host & port of the backend API websocket server
-  backend: getInjectedEnv('OVERRIDE_BACKEND_HOST'), // do not include the protocol
-  backendPort: getInjectedEnv('OVERRIDE_BACKEND_PORT'),
+  backend: "164.132.216.52", //getInjectedEnv('OVERRIDE_BACKEND_HOST'), // do not include the protocol
+  backendPort: 5555, //getInjectedEnv('OVERRIDE_BACKEND_PORT'),
   // Whether to connect to the backend server over ws:// or wss://
   secureSocket: (window.location.protocol === 'https:'),
   // Disables the transaction feed
   noTxFeed: false,
   noBlockFeed: false,
   // Minimum delay in ms before newly recieved transactions enter the visualization
-  txDelay: 10000,
-  donationsEnabled: true,
+  txDelay: 3000,
+  donationsEnabled: false,
   // Enables the message bar
-  messagesEnabled: true,
+  messagesEnabled: false,
   // Delay in ms between message bar rotations
   alertDuration: 20000,
 }

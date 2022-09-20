@@ -48,6 +48,13 @@ function createCachedDict (namespace, defaultValues) {
 	}
 }
 
+
+export const exchangeRatesBGL = makePollStore(
+  "ratesbgl",
+  "https://api.pancakeswap.info/api/v2/tokens/0x2bA64EFB7A4Ec8983E22A49c81fa216AC33f383A",
+  61000,
+  {}
+);
 // refresh exchange rates every minute
 export const exchangeRates = makePollStore('rates', 'https://blockchain.info/ticker', 60000, {})
 // refresh messages from donation server every hour

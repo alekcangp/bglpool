@@ -13,9 +13,23 @@
   import SupportersOverlay from '../components/SupportersOverlay.svelte'
   import Alerts from '../components/alert/Alerts.svelte'
   import { integerFormat } from '../utils/format.js'
-  import { exchangeRates, lastBlockId, haveSupporters, sidebarToggle } from '../stores.js'
+  import { exchangeRates, exchangeRatesBGL, lastBlockId, haveSupporters, sidebarToggle } from '../stores.js'
   import { formatCurrency } from '../utils/fx.js'
   import config from '../config.js'
+  import axios from 'axios'
+
+let fxBurnt = ''
+function Burnt() {
+    axios.get(`https://cors.bglnode.online/https://bgl.bitaps.com`)
+      .then(res => {
+        const per = res.data;
+        const se = per.indexOf('blockchain-state-burnt-coins')
+        fxBurnt = per.slice(se+63,se+73).replace(/[^0-9]/g,"") + "\u{1F525}";
+      })
+  }
+
+Burnt();
+setInterval(Burnt, 60000)
 
   let width = window.innerWidth - 20
   let height = window.innerHeight - 20
@@ -137,9 +151,14 @@
   const fxColor = 'good'
   let fxLabel = ''
   $: {
-    const rate = $exchangeRates[$settings.currency]
-    if (rate && rate.last)
-    fxLabel = formatCurrency($settings.currency, rate.last)
+    const rate0 = $exchangeRates["USD"];
+    const rate1 = $exchangeRates[$settings.currency];
+    const rate = $exchangeRatesBGL.data;
+    if (rate1 && rate1.last && rate && rate.price && rate0 && rate0.last)
+    fxLabel = formatCurrency($settings.currency, Math.round(rate.price / rate0.last * rate1.last  * 100000 ) / 100000)
+//    const rate = $exchangeRates[$settings.currency]
+ //   if (rate && rate.last)
+ //   fxLabel = formatCurrency($settings.currency, rate.last)
   }
 
 	const debounce = v => {
@@ -424,7 +443,8 @@
     <div class="status">
       <div class="row">
         {#if $settings.showFX && fxLabel }
-          <span class="fx-ticker {fxColor}" on:click={() => { $sidebarToggle = 'settings'}}>{ fxLabel }</span>
+          <span class="fx-ticker {fxColor}" title="BGL Price" on:click={() => { $sidebarToggle = 'settings'}}>{ fxLabel }</span>
+          <span class="fx-ticker {fxColor}" title="Total BGL burnt">{fxBurnt }</span>
         {/if}
       </div>
       <div class="row">

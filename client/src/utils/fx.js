@@ -252,7 +252,7 @@ export function formatCurrency (code, amount, params) {
     const amountPart = amount < 1000 ? amount.toPrecision(precision) : Math.round(amount)
     parts.push(`${amountPart}${['','K','M','B','T'][suffixIndex]}`)
   } else {
-    parts.push(amount.toLocaleString(undefined, { minimumFractionDigits: currency.dp, maximumFractionDigits: currency.dp }))
+    parts.push(amount.toLocaleString(undefined, { minimumFractionDigits: currency.dp * 2, maximumFractionDigits: currency.dp * 3 }))
   }
   if (!currency.pre) parts = parts.reverse()
   return parts.join(' ')

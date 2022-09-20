@@ -2,7 +2,7 @@
 import Icon from './Icon.svelte'
 import BookmarkIcon from '../assets/icon/cil-bookmark.svg'
 import { longBtcFormat, integerFormat } from '../utils/format.js'
-import { exchangeRates, settings, sidebarToggle, newHighlightQuery, highlightingFull } from '../stores.js'
+import { exchangeRates, exchangeRatesBGL, settings, sidebarToggle, newHighlightQuery, highlightingFull } from '../stores.js'
 import { formatCurrency } from '../utils/fx.js'
 
 export let tx
@@ -21,18 +21,26 @@ let formattedLocalValue
 
 $: {
   if (tx && tx.value) {
-    const rate = $exchangeRates[$settings.currency]
+//    const rate = $exchangeRates[$settings.currency]
+     const rate0 = $exchangeRates["USD"];
+    const rate1 = $exchangeRates[$settings.currency];
+    const rate = $exchangeRatesBGL.data;
     let local
-    if (rate && rate.last) {
-      formattedLocalValue = formatCurrency($settings.currency, (tx.value/100000000) * rate.last, { compact: true })
-    } else {
-      formattedLocalValue = null
+    if (rate1 && rate1.last && rate && rate.price && rate0 && rate0.last) {
+       formattedLocalValue = formatCurrency($settings.currency, (tx.value/100000000) * Math.round(rate.price / rate0.last * rate1.last  * 100000 ) / 100000, { compact: true })
+     } else {
+       formattedLocalValue = null
     }
+//    if (rate && rate.last) {
+//    formattedLocalValue = formatCurrency($settings.currency, (tx.value/100000000) * rate.last, { compact: true })
+//    } else {
+//    formattedLocalValue = null
+//    }
   }
 }
 
 function formatBTC (sats) {
-  return `₿ ${longBtcFormat.format(sats/100000000)}`
+  return `BGL ${longBtcFormat.format(sats/100000000)}`
 }
 
 function highlight () {
@@ -113,12 +121,14 @@ function highlight () {
 </style>
 
 <div class="tx-info" class:above style="left: {clampedX}px; top: {clampedY}px">
+<!--
   <div class="icon-button" class:disabled={$highlightingFull} on:click={highlight} title="Add to watchlist">
     <Icon icon={BookmarkIcon}/>
   </div>
   <p class="field hash">
-    TxID: { tx.id }
+   Age: { new Date(tx.time).toLocaleTimeString('en-US', { hour12: false }) } secs
   </p>
+-->
   {#if tx.inputs && !tx.coinbase }<p class="field inputs">{ tx.inputs.length } input{#if tx.inputs.length != 1}s{/if}</p>
   {:else if tx.coinbase }
     <p class="field coinbase">Coinbase: { tx.coinbase.sigAscii }</p>

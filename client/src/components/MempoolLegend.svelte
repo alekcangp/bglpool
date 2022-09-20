@@ -174,7 +174,7 @@ function generateColorScale (colorA, colorB) {
       {#each sizes as { size, value } }
         <div class="size-row">
           <span class="square-container"><div class="square" style="width: {size}px; height: {size}px" /></span>
-          <span class="value"><span class="part left">&lt;</span> <span class="part center">&#8383;</span><span class="part right">{ formatValue(value) }</span></span>
+          <span class="value"><span class="part left">&lt;</span> <span class="part center">BGL</span><span class="part right">{ formatValue(value) }</span></span>
         </div>
       {/each}
     {/if}

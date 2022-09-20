@@ -6,7 +6,7 @@
   import Icon from '../components/Icon.svelte'
   import closeIcon from '../assets/icon/cil-x-circle.svg'
   import { shortBtcFormat, longBtcFormat, timeFormat, integerFormat } from '../utils/format.js'
-  import { exchangeRates, settings } from '../stores.js'
+  import { exchangeRates, exchangeRatesBGL, settings } from '../stores.js'
   import { formatCurrency } from '../utils/fx.js'
 
 	const dispatch = createEventDispatcher()
@@ -21,10 +21,18 @@
 
   $: {
     if (block && block.value) {
-      const rate = $exchangeRates[$settings.currency]
+     // const rate = $exchangeRates[$settings.currency]
+       const rate0 = $exchangeRates["USD"];
+       const rate1 = $exchangeRates[$settings.currency];
+       const rate = $exchangeRatesBGL.data;
       let local
-      if (rate && rate.last) {
-        local = formatCurrency($settings.currency, (block.value/100000000) * rate.last, { compact: true })
+      //if (rate && rate.last) {
+      //  local = formatCurrency($settings.currency, (block.value/100000000) * rate.last, { compact: true })
+     // } else {
+      //  local = null
+     // }
+       if (rate1 && rate1.last && rate && rate.price && rate0 && rate0.last) {
+        local = formatCurrency($settings.currency, (block.value/100000000) * Math.round(rate.price / rate0.last * rate1.last  * 100000 ) / 100000, { compact: true })
       } else {
         local = null
       }
@@ -52,7 +60,7 @@
   }
 
   function formatBTC (sats) {
-    return `₿ ${shortBtcFormat.format(sats/100000000)}`
+    return `BGL ${shortBtcFormat.format(sats/100000000)}`
   }
 
   function formatBytes (bytes) {
